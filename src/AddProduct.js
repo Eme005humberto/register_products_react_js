@@ -23,11 +23,12 @@ const AddProduct = () => {
       },
       body:JSON.stringify(newProducts) //Convertimos los datos de producto enviado a la API en formato JSON
     })
-    .then(response => response.json()) //La respuesta se envia en formato JSON
-    .then(
-      
-    )
-  }
+    .then(response => response.json())
+    .then(data =>{
+      setProducts([...newProducts,data]);
+    })
+    .catch(error => console.error("Error al agregar producto: ",error));
+  };
   return(
     <div className="container mt-5">
     <h2>Agregar nuevo producto</h2>
