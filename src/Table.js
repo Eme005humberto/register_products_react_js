@@ -1,17 +1,22 @@
 import React, { useEffect, useState } from "react";
 import './style.css';
+import ProductosService from "./ProductosService";
+import { Link } from "react-router-dom";
 
 const AddProduct = () =>{
-    
 const [products,setProducts] = useState([]);
 
 useEffect(() =>{
-    fetch('http://localhost:8080/products')//Indicamos la API que devuelve los productos en la base de datos
-    .then(response => response.json()) //Convertimos la respuesta en formato JSON
-    .then(data => setProducts(data))//Los datos los almacena el parametro data y se guardan en el estado de product
-    .catch(error => console.error('Error al obtener productos:',error));//Mostramos un error si se presenta
-},[]);
+    ProductosService.getAllProducts().then(response =>{
+        setProducts(response.data);
+        console.log(response.data);
+    }).catch(error =>{
+        console.log(error);
+    })    
+},[])
     return (
+        <div className="container">
+            <Link to={'/add-product'} className="btn btn-primary">Agregar producto</Link>
             <table className="table table-striped container mt-5">
             <thead>
                 <tr>
@@ -25,7 +30,7 @@ useEffect(() =>{
             </thead>
             <tbody>
                 {products.map(product =>(
-                     <tr>
+                     <tr key={product.idProduct}>
                      <td>{product.idProduct}</td>
                      <td>{product.nameProduct}</td>
                      <td>{product.unitPrice}</td>
@@ -36,6 +41,7 @@ useEffect(() =>{
                 ))}
             </tbody>
         </table>
+        </div>
     );
 };
 export default AddProduct;
